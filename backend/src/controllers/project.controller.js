@@ -1,5 +1,5 @@
-const projectModel = require('../models/projects.model');
-const storageService = require('../services/storage.service')
+const projectModel = require("../models/projects.model");
+const storageService = require("../services/storage.service");
 const { v4: uuid } = require("uuid");
 
 async function createProject(req, res) {
@@ -36,13 +36,13 @@ async function editProject(req, res) {
 
     // Remove undefined fields (important)
     Object.keys(allowedUpdates).forEach(
-      (key) => allowedUpdates[key] === undefined && delete allowedUpdates[key]
+      (key) => allowedUpdates[key] === undefined && delete allowedUpdates[key],
     );
 
     const updatedProject = await projectModel.findByIdAndUpdate(
       id,
       allowedUpdates,
-      { new: true, runValidators: true }
+      { new: true, runValidators: true },
     );
 
     if (!updatedProject) {
@@ -77,6 +77,24 @@ async function deleteProject(req, res) {
     res.status(500).json({ message: "Server Error" });
   }
 }
-module.exports = {
-    createProject, editProject, deleteProject
+
+async function getAllProjects(req, res) {
+  try {
+    const projects = await projectModel.find().sort({ createdAt: -1 });
+
+    res.status(200).json({
+      message: "Projects fetched successfully",
+      projects,
+    });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: "Server Error" });
+  }
 }
+
+module.exports = {
+  createProject,
+  editProject,
+  deleteProject,
+  getAllProjects
+};

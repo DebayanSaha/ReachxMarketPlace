@@ -19,4 +19,6 @@ router.post('/create', upload.single('image'), projectController.createProject);
 router.put('/edit/:id', projectController.editProject);
 router.delete('/delete/:id', projectController.deleteProject);
 
+router.get('/', projectController.getAllProjects);
+
 module.exports = router
