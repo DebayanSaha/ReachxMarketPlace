@@ -12,7 +12,7 @@ app.get('/',(req,res)=>{
 });
 
 app.use(cors({
-    origin: ["http://localhost:5173","https://bite-craft.netlify.app"],
+    origin: ["http://localhost:5173"],
     credentials: true
 }));
 
