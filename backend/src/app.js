@@ -12,7 +12,7 @@ app.get('/',(req,res)=>{
 });
 
 app.use(cors({
-    origin: ["http://localhost:5173"],
+    origin: ["http://localhost:5173","https://reachx-admin.vercel.app/"],
     credentials: true
 }));
 
