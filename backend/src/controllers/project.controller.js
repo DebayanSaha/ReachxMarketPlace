@@ -22,6 +22,61 @@ async function createProject(req, res) {
   });
 }
 
+async function editProject(req, res) {
+  try {
+    const { id } = req.params;
+
+    // Only allow specific fields
+    const allowedUpdates = {
+      title: req.body.title,
+      description: req.body.description,
+      link: req.body.link,
+      category: req.body.category,
+    };
+
+    // Remove undefined fields (important)
+    Object.keys(allowedUpdates).forEach(
+      (key) => allowedUpdates[key] === undefined && delete allowedUpdates[key]
+    );
+
+    const updatedProject = await projectModel.findByIdAndUpdate(
+      id,
+      allowedUpdates,
+      { new: true, runValidators: true }
+    );
+
+    if (!updatedProject) {
+      return res.status(404).json({ message: "Project not found" });
+    }
+
+    res.status(200).json({
+      message: "Project updated successfully",
+      project: updatedProject,
+    });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: "Server Error" });
+  }
+}
+
+async function deleteProject(req, res) {
+  try {
+    const { id } = req.params;
+
+    const deletedProject = await projectModel.findByIdAndDelete(id);
+
+    if (!deletedProject) {
+      return res.status(404).json({ message: "Project not found" });
+    }
+
+    res.status(200).json({
+      message: "Project deleted successfully",
+    });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: "Server Error" });
+  }
+}
 module.exports = {
-    createProject
+    createProject, editProject, deleteProject
 }

@@ -16,7 +16,7 @@ const upload = multer({
 });
 
 router.post('/create', upload.single('image'), projectController.createProject);
-// router.post('/edit', projectController.registerUser);
-// router.post('/delete', projectController.loginUser);
+router.put('/edit/:id', projectController.editProject);
+router.delete('/delete/:id', projectController.deleteProject);
 
 module.exports = router
