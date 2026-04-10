@@ -31,34 +31,44 @@ async function registerUser(req, res) {
 }
 
 async function loginUser(req, res) {
-  const { email, password } = req.body;
+  try {
+    const { email, password } = req.body;
 
-  const user = await userModel.findOne({ email });
+    console.log("Login attempt:", email);
 
-  if (!user) {
-    return res.status(400).json({
-      message: " Invalid email or password",
+    const user = await userModel.findOne({ email });
+
+    if (!user) {
+      return res.status(400).json({
+        message: "Invalid email or password",
+      });
+    }
+
+    const isPassword = await bcrypt.compare(password, user.password);
+
+    if (!isPassword) {
+      return res.status(400).json({
+        message: "Invalid email or password",
+      });
+    }
+
+    res.status(200).json({
+      message: "User logged in successfully",
+      user: {
+        _id: user._id,
+        fullname: user.fullname,
+        email: user.email,
+      },
+    });
+
+  } catch (error) {
+    console.error("LOGIN ERROR:", error);
+    res.status(500).json({
+      message: "Server error",
+      error: error.message,
     });
   }
-
-  const isPassword = await bcrypt.compare(password, user.password);
-
-  if (!isPassword) {
-    return res.status(400).json({
-      message: " Invalid email or password",
-    });
-  }
-
-  res.status(201).json({
-    message: "User logged in succesfully",
-    user: {
-      _id: user._id,
-      fullname: user.fullname,
-      email: user.email,
-    },
-  })
 }
-
 module.exports = {
   registerUser,
   loginUser,
