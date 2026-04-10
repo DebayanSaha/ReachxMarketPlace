@@ -224,10 +224,8 @@ const Dashboard = ({ user, onLogout, addToast }) => {
             <div className="w-7 h-7 rounded-lg bg-violet-700 flex items-center justify-center">
               <IconGrid />
             </div>
-            <span className="text-sm font-medium tracking-wide text-white">Portfolio admin</span>
-            <span className="text-[10px] font-medium bg-violet-500/10 text-violet-300 border border-violet-500/20 px-2 py-0.5 rounded-full hidden sm:inline">
-              v2.0
-            </span>
+            <span className="text-sm font-medium tracking-wide text-white">Admin Panel</span>
+            
           </div>
 
           <div className="flex items-center gap-2">
