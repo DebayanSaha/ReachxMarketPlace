@@ -9,7 +9,8 @@ const app = express();
 app.use(cors({
     origin: [
         "http://localhost:5173",
-        "https://reachx-admin.vercel.app"
+        "https://reachx-admin.vercel.app",
+        "https://reachx-market-place.vercel.app/"
     ],
     credentials: true
 }));
