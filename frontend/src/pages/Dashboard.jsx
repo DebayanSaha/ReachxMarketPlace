@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from "react";
-import { createProject, getProjects, updateProject, deleteProject } from "../api/api";
+import { createProject, getProjects, updateProject, deleteProject, createClient } from "../api/api";
 import ProjectCard from "../components/ProjectCard";
 import EditModal from "../components/EditModal";
 import DeleteModal from "../components/DeleteModal";
@@ -52,7 +52,11 @@ const Dashboard = ({ user, onLogout, addToast }) => {
   const [search,        setSearch]        = useState("");
   const [catFilter,     setCatFilter]     = useState("All");
   const [sidebarOpen,   setSidebarOpen]   = useState(false);
+  const [clientImage,   setClientImage]   = useState(null);
+  const [clientPreview, setClientPreview] = useState(null);
+  const [clientLoading, setClientLoading] = useState(false);
   const fileRef = useRef(null);
+  const clientFileRef = useRef(null);
 
   const [form, setForm] = useState({
     title: "", description: "", link: "", category: "", image: null,
@@ -95,6 +99,23 @@ const Dashboard = ({ user, onLogout, addToast }) => {
     } catch (err) {
       addToast(err?.response?.data?.message || "Failed to create project", "error");
     } finally { setCreating(false); }
+  };
+
+  const handleClientUpload = async (e) => {
+    e.preventDefault();
+    if (!clientImage) { addToast("Please select a client image", "error"); return; }
+    setClientLoading(true);
+    try {
+      const fd = new FormData();
+      fd.append("image", clientImage);
+      await createClient(fd);
+      addToast("Client added!", "success");
+      setClientImage(null);
+      setClientPreview(null);
+      if (clientFileRef.current) clientFileRef.current.value = "";
+    } catch (err) {
+      addToast(err?.response?.data?.message || "Failed to add client", "error");
+    } finally { setClientLoading(false); }
   };
 
   const handleEdit = async (updated) => {
@@ -213,6 +234,52 @@ const Dashboard = ({ user, onLogout, addToast }) => {
     </form>
   );
 
+  const ClientContent = (
+    <form onSubmit={handleClientUpload} className="space-y-3.5">
+      <div>
+        <label className="block text-xs font-medium text-zinc-400 mb-2 tracking-wide">Client Logo/Image</label>
+        {clientPreview ? (
+          <div className="relative rounded-xl overflow-hidden aspect-video bg-zinc-900 group border border-white/[0.08]">
+            <img src={clientPreview} alt="Preview" className="w-full h-full object-contain p-2" />
+            <button
+              type="button"
+              onClick={() => {
+                setClientPreview(null);
+                setClientImage(null);
+                if (clientFileRef.current) clientFileRef.current.value = "";
+              }}
+              className="absolute top-2 right-2 w-6 h-6 bg-black/60 rounded-lg flex items-center justify-center text-zinc-300 opacity-0 group-hover:opacity-100 transition-opacity"
+            >
+              <IconX />
+            </button>
+          </div>
+        ) : (
+          <label className="flex flex-col items-center justify-center w-full aspect-video rounded-xl border-2 border-dashed border-white/[0.08] bg-[#1c2236] cursor-pointer hover:border-emerald-500/40 hover:bg-emerald-500/5 transition-all group">
+            <span className="text-zinc-600 group-hover:text-emerald-400 transition-colors"><IconImage /></span>
+            <span className="text-xs text-zinc-500 mt-2">Drop image or click to upload</span>
+            <span className="text-[11px] text-zinc-600 mt-0.5">PNG, JPG, WebP</span>
+            <input type="file" accept="image/*" onChange={(e) => {
+              if (e.target.files?.[0]) {
+                setClientImage(e.target.files[0]);
+                setClientPreview(URL.createObjectURL(e.target.files[0]));
+              }
+            }} ref={clientFileRef} className="hidden" />
+          </label>
+        )}
+      </div>
+      <button
+        type="submit" disabled={clientLoading}
+        className="w-full mt-1 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 active:scale-[0.98] text-white text-sm font-medium transition-all disabled:opacity-50 flex items-center justify-center gap-2"
+      >
+        {clientLoading ? (
+          <><span className="w-3.5 h-3.5 border-2 border-white/20 border-t-white rounded-full animate-spin" /> Uploading…</>
+        ) : (
+          <><IconPlus size={13} /> Upload client</>
+        )}
+      </button>
+    </form>
+  );
+
   return (
     // Root: full viewport height, no overflow — children manage their own scroll
     <div className="h-screen overflow-hidden bg-[#0f1117] text-zinc-100 flex flex-col">
@@ -274,6 +341,16 @@ const Dashboard = ({ user, onLogout, addToast }) => {
                 <span className="text-sm font-medium text-white">Add new project</span>
               </div>
               {FormContent}
+            </div>
+
+            <div className="bg-[#161b27] border border-white/[0.07] rounded-2xl p-5 mt-5">
+              <div className="flex items-center gap-2 mb-5">
+                <div className="w-6 h-6 rounded-lg bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center text-emerald-400">
+                  <IconPlus />
+                </div>
+                <span className="text-sm font-medium text-white">Add new client</span>
+              </div>
+              {ClientContent}
             </div>
           </aside>
 
@@ -395,6 +472,16 @@ const Dashboard = ({ user, onLogout, addToast }) => {
                 </button>
               </div>
               {FormContent}
+
+              <div className="w-full h-px bg-white/[0.08] my-8" />
+
+              <div className="flex items-center gap-2 mb-5">
+                <div className="w-6 h-6 rounded-lg bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center text-emerald-400">
+                  <IconPlus />
+                </div>
+                <span className="text-sm font-medium text-white">Add new client</span>
+              </div>
+              {ClientContent}
             </div>
           </div>
         </div>

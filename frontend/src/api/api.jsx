@@ -35,3 +35,10 @@ export const deleteProject = async (id) => {
   const res = await api.delete(`/project/delete/${id}`);
   return res.data;
 };
+
+export const createClient = async (formData) => {
+  const res = await api.post("/client/create", formData, {
+    headers: { "Content-Type": "multipart/form-data" },
+  });
+  return res.data;
+};
