@@ -119,7 +119,7 @@ const ProjectModal = ({ project, onClose }) => {
         </div>
 
         {/* Modal Content */}
-        <div style={{ padding: "28px 28px 24px" }}>
+        <div className="p-5 md:p-7 md:pb-6">
           <h2
             className="font-[font3]"
             style={{ fontSize: "22px", fontWeight: 700, color: "#0c1a2e", letterSpacing: "-0.02em", marginBottom: "10px" }}
@@ -198,7 +198,7 @@ const ProjectCard = ({ project, onExpand }) => {
           ? "0 24px 48px rgba(0,0,0,0.18), 0 0 0 1px rgba(255,255,255,0.4)"
           : "0 4px 24px rgba(0,0,0,0.08), 0 0 0 1px rgba(255,255,255,0.2)",
       }}
-      className="min-w-75 max-w-75 flex-0 rounded-3xl overflow-hidden bg-white backdrop-blur-xl border border-white/25"
+      className="min-w-[85vw] max-w-[85vw] md:min-w-75 md:max-w-75 flex-0 rounded-3xl overflow-hidden bg-white backdrop-blur-xl border border-white/25"
     >
       {/* Image */}
       <div className="relative h-45 w-full overflow-hidden bg-white/10">
@@ -324,24 +324,24 @@ const MartketPlace = () => {
   return (
     <div className="relative min-h-screen p-4 bg-linear-to-b from-white via-sky-300 to-sky-400">
       <style>{`@keyframes spin { to { transform: rotate(360deg); } }`}</style>
-
+      
       {/* Modal */}
       {activeProject && (
         <ProjectModal project={activeProject} onClose={() => setActiveProject(null)} />
       )}
 
       {/* Header */}
-      <div className="w-full p-4 flex flex-col gap-2 items-center justify-center py-12">
+      <div className="w-full p-4 flex flex-col gap-2 items-center justify-center py-8 md:py-12 mt-8 md:mt-0">
         <h2 className="bg-black/10 py-2 px-4 rounded-full font-[font3]">Portfolio</h2>
-        <h1 className="text-center font-[font3] text-9xl font-bold leading-[0.8]">
-          All our team's work <br /> in one place.
+        <h1 className="text-center font-[font3] text-5xl md:text-9xl font-bold leading-[1.1] md:leading-[0.8] mt-2 md:mt-0">
+          All our team's work <br className="hidden md:block" /> in one place.
         </h1>
       </div>
 
       {/* Search + Filter */}
-      <div className="relative w-full h-16 flex items-center justify-center">
-        <div className="mt-8 h-full w-[60%] flex items-center justify-between px-6 rounded-full backdrop-blur-lg bg-white/10 border border-white/20 shadow-lg">
-          <div className="flex items-center gap-3 px-5 py-2 rounded-full bg-white/20 backdrop-blur-md border border-white/30 w-100">
+      <div className="relative w-full h-auto md:h-16 flex items-center justify-center mt-2 md:mt-0">
+        <div className="mt-2 md:mt-8 py-3 md:py-0 h-auto md:h-full w-[95%] md:w-[60%] flex flex-col md:flex-row items-center justify-between px-4 md:px-6 gap-3 md:gap-0 rounded-3xl md:rounded-full backdrop-blur-lg bg-white/10 border border-white/20 shadow-lg">
+          <div className="flex items-center gap-3 px-4 md:px-5 py-2 rounded-full bg-white/20 backdrop-blur-md border border-white/30 w-full md:w-100">
             <i className="ri-search-line text-lg text-zinc-500" />
             <input
               type="text"
@@ -354,7 +354,7 @@ const MartketPlace = () => {
           <select
             value={selected}
             onChange={(e) => setSelected(e.target.value)}
-            className="px-4 py-2 rounded-full bg-white/20 text-zinc-500 border border-white/30 backdrop-blur-md outline-none"
+            className="px-4 py-2 w-full md:w-auto rounded-full bg-white/20 text-zinc-500 border border-white/30 backdrop-blur-md outline-none text-center md:text-left"
           >
             {filters.map((filter) => (
               <option key={filter} value={filter} className="text-black">{filter}</option>
@@ -364,7 +364,7 @@ const MartketPlace = () => {
       </div>
 
       {/* Cards Area */}
-      <div className="relative rounded-3xl mt-10 border border-sky-300 shadow-lg p-6 flex flex-col gap-10">
+      <div className="relative rounded-3xl mt-8 md:mt-10 border border-sky-300 shadow-lg p-4 md:p-6 flex flex-col gap-8 md:gap-10">
         {loading ? (
           <div className="flex flex-col items-center justify-center py-20 gap-3">
             <div className="w-8 h-8 rounded-full border-2 border-white/20 border-t-white/80" style={{ animation: "spin 0.8s linear infinite" }} />
