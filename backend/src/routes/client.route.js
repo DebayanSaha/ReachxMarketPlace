@@ -19,6 +19,6 @@ router.post('/create', upload.single('image'), clientController.createClient);
 
 router.delete('/delete/:id', clientController.deleteClient);
 
-router.get('/', clientController.getAllClients);
+router.get('/get', clientController.getAllClients);
 
 module.exports = router;
