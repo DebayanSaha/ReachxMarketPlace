@@ -291,7 +291,7 @@ const ProjectCard = ({ project, onExpand }) => {
 
           <div className="flex items-center gap-3">
             <a
-              href={`https://wa.me/918617262208?text=${encodeURIComponent(`hey I want to know more info about this\n\nPost Title: ${project.title}`)}`}
+              href={`https://wa.me/918617262208?text=${encodeURIComponent(`Hey I want to know more info about this\n\nPost Title: ${project.title}`)}`}
               target="_blank"
               rel="noopener noreferrer"
               className="flex items-center gap-1.5 text-[11px] font-[font3] uppercase text-emerald-600 hover:text-emerald-700 transition-colors duration-200 group"
