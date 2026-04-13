@@ -146,35 +146,57 @@ const ProjectModal = ({ project, onClose }) => {
               {project.category}
             </span>
 
-            {project.link ? (
+            <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
               <a
-                href={project.link}
+                href={`https://wa.me/918617262208?text=${encodeURIComponent(`hey I want to know more info about this\n\nPost Title: ${project.title}`)}`}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="font-[font3]"
                 style={{
                   display: "flex", alignItems: "center", gap: "8px",
                   padding: "10px 22px", borderRadius: "999px",
-                  background: "linear-gradient(135deg, #0ea5e9, #0369a1)",
+                  background: "linear-gradient(135deg, #10b981, #047857)",
                   color: "white", fontSize: "13px", fontWeight: 600,
                   textDecoration: "none", letterSpacing: "0.02em",
-                  boxShadow: "0 4px 14px rgba(14,165,233,0.35)",
+                  boxShadow: "0 4px 14px rgba(16,185,129,0.35)",
                   transition: "opacity 0.2s ease",
                 }}
                 onMouseEnter={(e) => e.currentTarget.style.opacity = "0.85"}
                 onMouseLeave={(e) => e.currentTarget.style.opacity = "1"}
               >
-                <i className="ri-links-line" style={{ fontSize: "14px" }} />
-                View Project
+                <i className="ri-whatsapp-line" style={{ fontSize: "14px" }} />
+                Contact Us
               </a>
-            ) : (
-              <span
-                className="font-[font3]"
-                style={{ fontSize: "12px", color: "rgba(12,26,46,0.3)", textTransform: "uppercase", letterSpacing: "0.08em" }}
-              >
-                No link available
-              </span>
-            )}
+              {project.link ? (
+                <a
+                  href={project.link}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="font-[font3]"
+                  style={{
+                    display: "flex", alignItems: "center", gap: "8px",
+                    padding: "10px 22px", borderRadius: "999px",
+                    background: "linear-gradient(135deg, #0ea5e9, #0369a1)",
+                    color: "white", fontSize: "13px", fontWeight: 600,
+                    textDecoration: "none", letterSpacing: "0.02em",
+                    boxShadow: "0 4px 14px rgba(14,165,233,0.35)",
+                    transition: "opacity 0.2s ease",
+                  }}
+                  onMouseEnter={(e) => e.currentTarget.style.opacity = "0.85"}
+                  onMouseLeave={(e) => e.currentTarget.style.opacity = "1"}
+                >
+                  <i className="ri-links-line" style={{ fontSize: "14px" }} />
+                  View Project
+                </a>
+              ) : (
+                <span
+                  className="font-[font3]"
+                  style={{ fontSize: "12px", color: "rgba(12,26,46,0.3)", textTransform: "uppercase", letterSpacing: "0.08em" }}
+                >
+                  No link available
+                </span>
+              )}
+            </div>
           </div>
         </div>
       </div>
@@ -267,23 +289,36 @@ const ProjectCard = ({ project, onExpand }) => {
             More
           </button>
 
-          {project.link ? (
+          <div className="flex items-center gap-3">
             <a
-              href={project.link}
+              href={`https://wa.me/918617262208?text=${encodeURIComponent(`hey I want to know more info about this\n\nPost Title: ${project.title}`)}`}
               target="_blank"
               rel="noopener noreferrer"
-              className="flex items-center gap-1.5 text-[11px] font-[font3] uppercase text-blue-950 hover:text-blue-800 transition-colors duration-200 group"
+              className="flex items-center gap-1.5 text-[11px] font-[font3] uppercase text-emerald-600 hover:text-emerald-700 transition-colors duration-200 group"
             >
-              View
-              <span className="w-5 h-5 rounded-full border border-black/10 flex items-center justify-center text-[10px] transition-transform duration-200 group-hover:translate-x-1">
-                <i className="ri-links-line"></i>
+              Contact Us
+              <span className="w-5 h-5 rounded-full border border-emerald-600/20 flex items-center justify-center text-[10px] transition-transform duration-200 group-hover:scale-110">
+                <i className="ri-whatsapp-line"></i>
               </span>
             </a>
-          ) : (
-            <span className="text-[11px] text-black/20 uppercase tracking-wide font-[font3]">
-              No link
-            </span>
-          )}
+            {project.link ? (
+              <a
+                href={project.link}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center gap-1.5 text-[11px] font-[font3] uppercase text-blue-950 hover:text-blue-800 transition-colors duration-200 group"
+              >
+                View
+                <span className="w-5 h-5 rounded-full border border-black/10 flex items-center justify-center text-[10px] transition-transform duration-200 group-hover:translate-x-1">
+                  <i className="ri-links-line"></i>
+                </span>
+              </a>
+            ) : (
+              <span className="text-[11px] text-black/20 uppercase tracking-wide font-[font3]">
+                No link
+              </span>
+            )}
+          </div>
         </div>
       </div>
     </div>
