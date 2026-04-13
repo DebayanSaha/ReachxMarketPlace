@@ -141,7 +141,7 @@ const ProjectModal = ({ project, onClose }) => {
           <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
             <span
               className="font-[font3]"
-              style={{ fontSize: "12px", color: "rgba(12,26,46,0.35)", textTransform: "uppercase", letterSpacing: "0.08em" }}
+              style={{ fontSize: "14px", color: "rgba(12,26,46,0.35)", textTransform: "uppercase", letterSpacing: "0.08em" }}
             >
               {project.category}
             </span>
@@ -247,7 +247,7 @@ const ProjectCard = ({ project, onExpand }) => {
 
         {project.category && (
           <div className="absolute top-3 left-3">
-            <span className="text-[10px] font-semibold tracking-widest uppercase px-3 py-1 rounded-full bg-black/30 backdrop-blur-md text-white/80 border border-white/20">
+            <span className="text-[14px] font-semibold tracking-widest uppercase px-3 py-1 rounded-full bg-black/30 backdrop-blur-md text-white/80 border border-white/20">
               {project.category}
             </span>
           </div>
@@ -417,7 +417,7 @@ const MartketPlace = () => {
             return (
               <div key={category}>
                 <div className="flex items-center gap-3 mb-5">
-                  <span className="bg-black/10 py-2 px-5 rounded-full font-[font3] text-sm font-bold">{category}</span>
+                  <span className="bg-black/10 py-2 px-5 rounded-full font-[font3] text-xl font-bold">{category}</span>
                   <div className="flex-1 h-px bg-zinc-600/50" />
                   <span className="text-xs text-blue-900 font-[font3] uppercase">
                     {categoryProjects.length} project{categoryProjects.length !== 1 ? "s" : ""}
