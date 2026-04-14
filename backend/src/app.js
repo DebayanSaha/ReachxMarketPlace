@@ -10,7 +10,8 @@ app.use(cors({
     origin: [
         "http://localhost:5173",
         "https://reachx-admin.vercel.app",
-        "https://reachx-market-place.vercel.app"
+        "https://reachx-market-place.vercel.app",
+        "https://reachxgroup.netlify.app/",
     ],
     credentials: true
 }));
