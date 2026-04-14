@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 
 const BASE_URL =
   import.meta.env.VITE_API_BASE_URL || "https://reachxmarketplace.onrender.com";
@@ -7,6 +7,239 @@ const getProjects = async () => {
   const res = await fetch(`${BASE_URL}/project`);
   if (!res.ok) throw new Error("Failed to fetch projects");
   return res.json();
+};
+
+// ─── Industries Data ──────────────────────────────────────────────────────────
+const INDUSTRIES = [
+  { name: "Agro Product Websites",            icon: "ri-plant-line",           color: "#16a34a", grad: "linear-gradient(135deg,#22c55e,#16a34a)" },
+  { name: "Astrology Websites",               icon: "ri-moon-line",            color: "#7c3aed", grad: "linear-gradient(135deg,#a78bfa,#7c3aed)" },
+  { name: "Bank Websites",                    icon: "ri-bank-line",            color: "#b45309", grad: "linear-gradient(135deg,#fbbf24,#b45309)" },
+  { name: "Classified Websites",              icon: "ri-megaphone-line",       color: "#1d4ed8", grad: "linear-gradient(135deg,#60a5fa,#1d4ed8)" },
+  { name: "College and University Websites",  icon: "ri-graduation-cap-line",  color: "#0369a1", grad: "linear-gradient(135deg,#38bdf8,#0369a1)" },
+  { name: "Computer and Telecom Websites",    icon: "ri-wifi-line",            color: "#0e7490", grad: "linear-gradient(135deg,#22d3ee,#0e7490)" },
+  { name: "E-commerce Websites",              icon: "ri-shopping-cart-line",   color: "#047857", grad: "linear-gradient(135deg,#34d399,#047857)" },
+  { name: "Education Websites",               icon: "ri-book-2-line",          color: "#b91c1c", grad: "linear-gradient(135deg,#f87171,#b91c1c)" },
+  { name: "Event Management Websites",        icon: "ri-calendar-event-line",  color: "#c2410c", grad: "linear-gradient(135deg,#fb923c,#c2410c)" },
+  { name: "Fashion Websites",                 icon: "ri-scissors-cut-line",    color: "#be185d", grad: "linear-gradient(135deg,#f472b6,#be185d)" },
+  { name: "Food and Drinks Websites",         icon: "ri-restaurant-2-line",    color: "#a16207", grad: "linear-gradient(135deg,#facc15,#a16207)" },
+  { name: "Government Websites",              icon: "ri-government-line",      color: "#44403c", grad: "linear-gradient(135deg,#a8a29e,#44403c)" },
+  { name: "Hospital/Pharma Websites",         icon: "ri-hospital-line",        color: "#1e40af", grad: "linear-gradient(135deg,#93c5fd,#1e40af)" },
+  { name: "Hotel Websites",                   icon: "ri-hotel-line",           color: "#6d28d9", grad: "linear-gradient(135deg,#c4b5fd,#6d28d9)" },
+  { name: "Import Export Websites",           icon: "ri-ship-line",            color: "#075985", grad: "linear-gradient(135deg,#7dd3fc,#075985)" },
+  { name: "Industrial Websites",              icon: "ri-building-4-line",      color: "#374151", grad: "linear-gradient(135deg,#9ca3af,#374151)" },
+  { name: "Interior Design Websites",         icon: "ri-layout-masonry-line",  color: "#92400e", grad: "linear-gradient(135deg,#fcd34d,#92400e)" },
+  { name: "Laundry Service Websites",         icon: "ri-drop-line",            color: "#0284c7", grad: "linear-gradient(135deg,#7dd3fc,#0284c7)" },
+  { name: "Legal Websites",                   icon: "ri-scales-3-line",        color: "#1f2937", grad: "linear-gradient(135deg,#6b7280,#1f2937)" },
+  { name: "Magazine Websites",                icon: "ri-newspaper-line",       color: "#4338ca", grad: "linear-gradient(135deg,#a5b4fc,#4338ca)" },
+  { name: "News Websites",                    icon: "ri-broadcast-line",       color: "#dc2626", grad: "linear-gradient(135deg,#fca5a5,#dc2626)" },
+  { name: "NGO Websites",                     icon: "ri-team-line",            color: "#15803d", grad: "linear-gradient(135deg,#86efac,#15803d)" },
+  { name: "Personal Websites",                icon: "ri-user-3-line",          color: "#7c3aed", grad: "linear-gradient(135deg,#c4b5fd,#7c3aed)" },
+  { name: "Photography Websites",             icon: "ri-camera-3-line",        color: "#1e293b", grad: "linear-gradient(135deg,#94a3b8,#1e293b)" },
+  { name: "Product Websites",                 icon: "ri-shopping-bag-3-line",  color: "#ea580c", grad: "linear-gradient(135deg,#fdba74,#ea580c)" },
+  { name: "Real Estate Websites",             icon: "ri-home-4-line",          color: "#1d4ed8", grad: "linear-gradient(135deg,#93c5fd,#1d4ed8)" },
+  { name: "School Websites",                  icon: "ri-school-line",          color: "#0369a1", grad: "linear-gradient(135deg,#38bdf8,#0369a1)" },
+  { name: "Share Related Websites",           icon: "ri-stock-line",           color: "#166534", grad: "linear-gradient(135deg,#4ade80,#166534)" },
+  { name: "Solar System Websites",            icon: "ri-sun-line",             color: "#b45309", grad: "linear-gradient(135deg,#fde68a,#b45309)" },
+  { name: "Special Activity Websites",        icon: "ri-basketball-line",      color: "#15803d", grad: "linear-gradient(135deg,#86efac,#15803d)" },
+  { name: "Spiritual and Meditation Websites",icon: "ri-mental-health-line",   color: "#9333ea", grad: "linear-gradient(135deg,#e879f9,#9333ea)" },
+  { name: "Technical Support",                icon: "ri-customer-service-2-line",color:"#0f766e",grad: "linear-gradient(135deg,#2dd4bf,#0f766e)" },
+  { name: "Training & Job Consultancy",       icon: "ri-briefcase-4-line",     color: "#991b1b", grad: "linear-gradient(135deg,#fca5a5,#991b1b)" },
+  { name: "Transport and Logistic Websites",  icon: "ri-truck-line",           color: "#1e40af", grad: "linear-gradient(135deg,#93c5fd,#1e40af)" },
+  { name: "Travel And Tourism Websites",      icon: "ri-plane-line",           color: "#0c4a6e", grad: "linear-gradient(135deg,#7dd3fc,#0c4a6e)" },
+  { name: "Other Websites",                   icon: "ri-apps-2-line",          color: "#5b21b6", grad: "linear-gradient(135deg,#a78bfa,#5b21b6)" },
+];
+
+// ─── Industries Modal ─────────────────────────────────────────────────────────
+const IndustriesModal = ({ onClose }) => {
+  const backdropRef = useRef(null);
+
+  useEffect(() => {
+    const handler = (e) => { if (e.key === "Escape") onClose(); };
+    window.addEventListener("keydown", handler);
+    return () => window.removeEventListener("keydown", handler);
+  }, [onClose]);
+
+  useEffect(() => {
+    document.body.style.overflow = "hidden";
+    return () => { document.body.style.overflow = ""; };
+  }, []);
+
+  const handleBackdrop = (e) => {
+    if (e.target === backdropRef.current) onClose();
+  };
+
+  return (
+    <div
+      ref={backdropRef}
+      onClick={handleBackdrop}
+      style={{
+        position: "fixed",
+        inset: 0,
+        zIndex: 9998,
+        background: "rgba(0,0,0,0.45)",
+        backdropFilter: "blur(6px)",
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+        padding: "1rem",
+        animation: "fadeIn 0.2s ease",
+      }}
+    >
+      <div
+        style={{
+          width: "100%",
+          maxWidth: "780px",
+          maxHeight: "88vh",
+          borderRadius: "24px",
+          background: "#ffffff",
+          boxShadow: "0 32px 80px rgba(0,0,0,0.22), 0 0 0 1px rgba(0,0,0,0.06)",
+          display: "flex",
+          flexDirection: "column",
+          overflow: "hidden",
+          animation: "slideUp 0.28s cubic-bezier(0.34,1.56,0.64,1)",
+        }}
+      >
+        {/* Header */}
+        <div
+          style={{
+            padding: "28px 28px 20px",
+            borderBottom: "1px solid rgba(0,0,0,0.07)",
+            flexShrink: 0,
+            background: "#fff",
+            position: "sticky",
+            top: 0,
+            zIndex: 2,
+            display: "flex",
+            alignItems: "flex-start",
+            justifyContent: "space-between",
+            gap: "12px",
+          }}
+        >
+          <div>
+            <h2
+              className="font-[font3]"
+              style={{
+                fontSize: "20px",
+                fontWeight: 700,
+                color: "#0c1a2e",
+                letterSpacing: "-0.02em",
+                marginBottom: "4px",
+              }}
+            >
+              Industries We Have Designed Websites For
+            </h2>
+            <p
+              className="font-[font3]"
+              style={{ fontSize: "12px", color: "rgba(12,26,46,0.45)", lineHeight: 1.5 }}
+            >
+              Industry-Specific Solutions for Your Business &mdash; From Startups to Enterprises: We Design for All
+            </p>
+          </div>
+          <button
+            onClick={onClose}
+            style={{
+              flexShrink: 0,
+              width: "32px",
+              height: "32px",
+              borderRadius: "50%",
+              border: "1px solid rgba(0,0,0,0.1)",
+              background: "rgba(0,0,0,0.04)",
+              color: "#0c1a2e",
+              fontSize: "15px",
+              cursor: "pointer",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              transition: "background 0.2s",
+            }}
+            onMouseEnter={(e) => e.currentTarget.style.background = "rgba(0,0,0,0.1)"}
+            onMouseLeave={(e) => e.currentTarget.style.background = "rgba(0,0,0,0.04)"}
+          >
+            ✕
+          </button>
+        </div>
+
+        {/* Scrollable Grid */}
+        <div
+          style={{
+            overflowY: "auto",
+            padding: "20px 24px 28px",
+            display: "grid",
+            gridTemplateColumns: "repeat(4, 1fr)",
+            gap: "12px",
+          }}
+          className="industries-grid"
+        >
+          <style>{`
+            .industries-grid::-webkit-scrollbar { width: 4px; }
+            .industries-grid::-webkit-scrollbar-track { background: transparent; }
+            .industries-grid::-webkit-scrollbar-thumb { background: rgba(0,0,0,0.15); border-radius: 4px; }
+            @media (max-width: 600px) {
+              .industries-grid { grid-template-columns: repeat(2, 1fr) !important; }
+            }
+            @media (min-width: 601px) and (max-width: 768px) {
+              .industries-grid { grid-template-columns: repeat(3, 1fr) !important; }
+            }
+            .industry-card { cursor: default; transition: all 0.22s ease; }
+            .industry-card:hover { box-shadow: 0 6px 20px rgba(0,0,0,0.12) !important; transform: translateY(-3px) !important; border-color: rgba(0,0,0,0.14) !important; }
+            .industry-card:hover .industry-name { color: #0c1a2e !important; }
+            .industry-icon-circle { transition: transform 0.22s ease, box-shadow 0.22s ease; }
+            .industry-card:hover .industry-icon-circle { transform: scale(1.08); box-shadow: 0 6px 18px rgba(0,0,0,0.22) !important; }
+          `}</style>
+          {INDUSTRIES.map((ind) => (
+            <div
+              key={ind.name}
+              className="industry-card"
+              style={{
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "center",
+                justifyContent: "center",
+                gap: "10px",
+                padding: "18px 10px 14px",
+                borderRadius: "14px",
+                border: "1px solid rgba(0,0,0,0.07)",
+                background: "#ffffff",
+              }}
+            >
+              {/* Colorful circular icon */}
+              <div
+                className="industry-icon-circle"
+                style={{
+                  width: "58px",
+                  height: "58px",
+                  borderRadius: "50%",
+                  background: ind.grad,
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  boxShadow: `0 4px 12px ${ind.color}55`,
+                  flexShrink: 0,
+                }}
+              >
+                <i
+                  className={`${ind.icon} industry-icon`}
+                  style={{ fontSize: "24px", color: "#ffffff", lineHeight: 1 }}
+                />
+              </div>
+              <span
+                className="industry-name font-[font3]"
+                style={{
+                  fontSize: "10px",
+                  color: "rgba(12,26,46,0.55)",
+                  textAlign: "center",
+                  lineHeight: 1.4,
+                  transition: "color 0.22s ease",
+                }}
+              >
+                {ind.name}
+              </span>
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
 };
 
 // ─── Modal ────────────────────────────────────────────────────────────────────
@@ -333,6 +566,7 @@ const MartketPlace = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [activeProject, setActiveProject] = useState(null);
+  const [showIndustries, setShowIndustries] = useState(false);
 
   useEffect(() => {
     getProjects()
@@ -358,11 +592,20 @@ const MartketPlace = () => {
 
   return (
     <div className="relative min-h-screen p-4 bg-linear-to-b from-white via-sky-300 to-sky-400">
-      <style>{`@keyframes spin { to { transform: rotate(360deg); } }`}</style>
-      
-      {/* Modal */}
+      <style>{`
+        @keyframes spin { to { transform: rotate(360deg); } }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        @keyframes slideUp { from { opacity: 0; transform: translateY(28px) scale(0.97); } to { opacity: 1; transform: translateY(0) scale(1); } }
+      `}</style>
+
+      {/* Project Modal */}
       {activeProject && (
         <ProjectModal project={activeProject} onClose={() => setActiveProject(null)} />
+      )}
+
+      {/* Industries Modal */}
+      {showIndustries && (
+        <IndustriesModal onClose={() => setShowIndustries(false)} />
       )}
 
       {/* Header */}
@@ -386,15 +629,49 @@ const MartketPlace = () => {
               className="bg-transparent outline-none text-sm text-white placeholder-zinc-800 w-full"
             />
           </div>
-          <select
-            value={selected}
-            onChange={(e) => setSelected(e.target.value)}
-            className="px-4 py-2 w-full md:w-auto rounded-full bg-white/20 text-zinc-500 border border-white/30 backdrop-blur-md outline-none text-center md:text-left"
-          >
-            {filters.map((filter) => (
-              <option key={filter} value={filter} className="text-black">{filter}</option>
-            ))}
-          </select>
+          <div className="flex items-center gap-2 w-full md:w-auto">
+            <select
+              value={selected}
+              onChange={(e) => setSelected(e.target.value)}
+              className="px-4 py-2 flex-1 md:flex-none md:w-auto rounded-full bg-white/20 text-zinc-500 border border-white/30 backdrop-blur-md outline-none text-center md:text-left"
+            >
+              {filters.map((filter) => (
+                <option key={filter} value={filter} className="text-black">{filter}</option>
+              ))}
+            </select>
+            <button
+              onClick={() => setShowIndustries(true)}
+              className="font-[font3]"
+              style={{
+                display: "flex",
+                alignItems: "center",
+                gap: "6px",
+                padding: "8px 16px",
+                borderRadius: "999px",
+                background: "rgba(255,255,255,0.25)",
+                backdropFilter: "blur(12px)",
+                border: "1px solid rgba(255,255,255,0.35)",
+                color: "#3f3f46",
+                fontSize: "13px",
+                fontWeight: 500,
+                cursor: "pointer",
+                whiteSpace: "nowrap",
+                transition: "background 0.2s ease, box-shadow 0.2s ease",
+                boxShadow: "0 2px 8px rgba(0,0,0,0.08)",
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.background = "rgba(255,255,255,0.45)";
+                e.currentTarget.style.boxShadow = "0 4px 16px rgba(0,0,0,0.12)";
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.background = "rgba(255,255,255,0.25)";
+                e.currentTarget.style.boxShadow = "0 2px 8px rgba(0,0,0,0.08)";
+              }}
+            >
+              <i className="ri-layout-grid-line" style={{ fontSize: "14px" }} />
+              Industries We Serve
+            </button>
+          </div>
         </div>
       </div>
 
