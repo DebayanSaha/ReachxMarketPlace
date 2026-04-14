@@ -126,13 +126,13 @@ const IndustriesModal = ({ onClose }) => {
                 marginBottom: "4px",
               }}
             >
-              Industries We Have Designed Websites For
+              Industries We Work For
             </h2>
             <p
               className="font-[font3]"
               style={{ fontSize: "12px", color: "rgba(12,26,46,0.45)", lineHeight: 1.5 }}
             >
-              Industry-Specific Solutions for Your Business &mdash; From Startups to Enterprises: We Design for All
+              Industry-Specific Solutions for Your Business &mdash; From Startups to Enterprises: We work for All
             </p>
           </div>
           <button
@@ -173,18 +173,18 @@ const IndustriesModal = ({ onClose }) => {
           <style>{`
             .industries-grid::-webkit-scrollbar { width: 4px; }
             .industries-grid::-webkit-scrollbar-track { background: transparent; }
-            .industries-grid::-webkit-scrollbar-thumb { background: rgba(0,0,0,0.15); border-radius: 4px; }
+            .industries-grid::-webkit-scrollbar-thumb { background: rgba(0,0,0,0.12); border-radius: 4px; }
             @media (max-width: 600px) {
               .industries-grid { grid-template-columns: repeat(2, 1fr) !important; }
             }
             @media (min-width: 601px) and (max-width: 768px) {
               .industries-grid { grid-template-columns: repeat(3, 1fr) !important; }
             }
-            .industry-card { cursor: default; transition: all 0.22s ease; }
-            .industry-card:hover { box-shadow: 0 6px 20px rgba(0,0,0,0.12) !important; transform: translateY(-3px) !important; border-color: rgba(0,0,0,0.14) !important; }
+            .industry-card { cursor: default; transition: border-color 0.18s ease, box-shadow 0.18s ease, transform 0.18s ease; }
+            .industry-card:hover { box-shadow: 0 4px 14px rgba(0,0,0,0.08) !important; transform: translateY(-2px) !important; border-color: rgba(0,0,0,0.13) !important; }
             .industry-card:hover .industry-name { color: #0c1a2e !important; }
-            .industry-icon-circle { transition: transform 0.22s ease, box-shadow 0.22s ease; }
-            .industry-card:hover .industry-icon-circle { transform: scale(1.08); box-shadow: 0 6px 18px rgba(0,0,0,0.22) !important; }
+            .industry-icon-circle { transition: transform 0.18s ease; }
+            .industry-card:hover .industry-icon-circle { transform: scale(1.06); }
           `}</style>
           {INDUSTRIES.map((ind) => (
             <div
@@ -206,14 +206,13 @@ const IndustriesModal = ({ onClose }) => {
               <div
                 className="industry-icon-circle"
                 style={{
-                  width: "58px",
-                  height: "58px",
+                  width: "56px",
+                  height: "56px",
                   borderRadius: "50%",
                   background: ind.grad,
                   display: "flex",
                   alignItems: "center",
                   justifyContent: "center",
-                  boxShadow: `0 4px 12px ${ind.color}55`,
                   flexShrink: 0,
                 }}
               >
