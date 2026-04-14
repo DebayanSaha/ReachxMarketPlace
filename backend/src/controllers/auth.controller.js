@@ -1,63 +1,35 @@
-const userModel = require("../models/auth.model");
-const bcrypt = require("bcryptjs");
-
-async function registerUser(req, res) {
-  const { fullname, email, password } = req.body;
-
-  const userExist = await userModel.findOne({ email });
-
-  if (userExist) {
-    return res.status(400).json({
-      message: "User already exists",
-    });
-  }
-
-  const hashedPassword = await bcrypt.hash(password, 10);
-
-  const user = await userModel.create({
-    fullname,
-    email,
-    password: hashedPassword,
-  });
-
-  res.status(201).json({
-    message: "User registered succesfully",
-    user: {
-      _id: user._id,
-      fullname: user.fullname,
-      email: user.email,
-    },
-  });
-}
-
 async function loginUser(req, res) {
   try {
+    // Hardcoded credentials
+    const STATIC_EMAIL = "reachxgroup@gmail.com";
+    const STATIC_PASSWORD = "Reachxgroup@2026";
+
+    // Get data from request body
     const { email, password } = req.body;
 
     console.log("Login attempt:", email);
 
-    const user = await userModel.findOne({ email });
-
-    if (!user) {
+    // Check email
+    if (email !== STATIC_EMAIL) {
       return res.status(400).json({
         message: "Invalid email or password",
       });
     }
 
-    const isPassword = await bcrypt.compare(password, user.password);
-
-    if (!isPassword) {
+    // Check password
+    if (password !== STATIC_PASSWORD) {
       return res.status(400).json({
         message: "Invalid email or password",
       });
     }
 
+    // Success response
     res.status(200).json({
       message: "User logged in successfully",
       user: {
-        _id: user._id,
-        fullname: user.fullname,
-        email: user.email,
+        _id: "static-id-123",
+        fullname: "ReachX Admin",
+        email: STATIC_EMAIL,
       },
     });
 
@@ -69,7 +41,7 @@ async function loginUser(req, res) {
     });
   }
 }
+
 module.exports = {
-  registerUser,
   loginUser,
 };
